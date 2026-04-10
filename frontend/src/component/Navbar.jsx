@@ -6,6 +6,7 @@ import { ShopContext } from '../context/ShopContext'
 const Navbar = () => {
 
   const[visible , setVisible] = useState(false)
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const{setShowSearch ,getCartCount,navigate,token,setToken,setCartItems} = useContext(ShopContext)
 
   const logout=()=>{
@@ -13,33 +14,33 @@ const Navbar = () => {
     setToken('')
     localStorage.removeItem('token')
     setCartItems({})
-    
+    setProfileDropdownOpen(false)
   }
 
   return (
-    <div className='flex items-center justify-between py-5 font-medium bg-white border-b border-gray-100/50 mb-5 transition-all'>
+    <div className='flex items-center justify-between py-2 font-medium bg-white border-b border-gray-100/50 mb-5 transition-all'>
 
         <Link to='/'><img src={assets.logo} className='w-36' /></Link>
 
         <ul className='hidden sm:flex gap-5 text-sm text-gray-700'>
-            <NavLink to="/" className="flex flex-col items-center gap-1">
+            <NavLink to="/" className="flex flex-col items-center gap-0">
                 <p>HOME</p>
-                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 '/>
+                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 -mt-1'/>
             </NavLink>
 
-            <NavLink to="/collection" className="flex flex-col items-center gap-1">
+            <NavLink to="/collection" className="flex flex-col items-center gap-0">
                 <p>COLLECTION</p>
-                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 '/>
+                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 -mt-1'/>
             </NavLink>
 
-            <NavLink to="/about" className="flex flex-col items-center gap-1">
+            <NavLink to="/about" className="flex flex-col items-center gap-0">
                 <p>ABOUT</p>
-                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 '/>
+                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 -mt-1'/>
             </NavLink>
 
-            <NavLink to="/contact" className="flex flex-col items-center gap-1">
+            <NavLink to="/contact" className="flex flex-col items-center gap-0">
                 <p>CONTACT</p>
-                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 '/>
+                <hr className='w-2/4 border-none h-[2px] bg-black hidden transition-all duration-300 -mt-1'/>
             </NavLink>
         </ul>
 
@@ -47,15 +48,15 @@ const Navbar = () => {
           <img onClick={()=>setShowSearch(true)} src= {assets.search_icon} className='w-5 cursor-pointer '/>
 
           <div className='group relative'>
-         <img onClick={()=> token ? null : navigate('/login')} src= {assets.profile_icon} className='w-5 cursor-pointer'/>
+         <img onClick={()=> token ? setProfileDropdownOpen(!profileDropdownOpen) : navigate('/login')} src= {assets.profile_icon} className='w-5 cursor-pointer'/>
          {/* dropdown */}
 
             {
               token && 
-              <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-50'>
+              <div className={`group-hover:block absolute dropdown-menu right-0 pt-4 z-50 ${profileDropdownOpen ? 'block' : 'hidden'}`}>
               <div className='flex flex-col gap-3 w-36 py-4 px-5 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-xl text-gray-600 border border-gray-50'>
                 <p className='cursor-pointer hover:text-black hover:translate-x-1 transition-transform'>My Profile</p>
-                <p onClick={()=>navigate('/orders')} className='cursor-pointer hover:text-black hover:translate-x-1 transition-transform'>Orders</p>
+                <p onClick={()=> { navigate('/orders'); setProfileDropdownOpen(false); }} className='cursor-pointer hover:text-black hover:translate-x-1 transition-transform'>Orders</p>
                 <p onClick={logout} className='cursor-pointer hover:text-black hover:translate-x-1 transition-transform'>Logout</p>
               </div>
             </div>
